@@ -1,0 +1,20 @@
+/* 특수교육 점선체 웹폰트. 사용 예: font-family: '특수교육 점선필기체'; */
+
+/* 특수교육 점선바른체 */
+@font-face {
+  font-family: '특수교육 점선바른체';
+  src: url('./SpecialEdJeomseonBareun.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* 특수교육 점선필기체 */
+@font-face {
+  font-family: '특수교육 점선필기체';
+  src: url('./SpecialEdJeomseonPilgi.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+

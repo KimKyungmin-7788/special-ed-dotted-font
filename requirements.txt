@@ -1,0 +1,5 @@
+fonttools>=4.50
+freetype-py>=2.4
+numpy>=1.26
+scipy>=1.11
+scikit-image>=0.22
