@@ -176,6 +176,29 @@ def main():
             sp = split_glyph(comps, want[t])
             if sp:
                 parts[cp] = sp
+    # 잘못 자른 재료 거르기: 같은 중성끼리 비교해 윗부분(초성+중성)의 높이·폭이 보통의 0.8~1.25배를
+    # 벗어나면 버린다(예: 받침과 함께 중성 일부가 잘려 나가 윗부분에 모음이 빠진 경우).
+    by_v = defaultdict(list)
+    for cp, (top, bot) in parts.items():
+        b = union_b([x[1] for x in top])
+        by_v[dec(cp)[1]].append((b[3] - b[1], b[2] - b[0]))
+    med_v = {v: (median(r[0] for r in rows), median(r[1] for r in rows)) for v, rows in by_v.items()}
+    for cp in list(parts):
+        b = union_b([x[1] for x in parts[cp][0]])
+        mh, mw = med_v[dec(cp)[1]]
+        if not (0.8 * mh <= b[3] - b[1] <= 1.25 * mh and 0.8 * mw <= b[2] - b[0] <= 1.25 * mw):
+            del parts[cp]
+    # 받침 없는 같은 초성+중성 글자(예: '듕'이면 '듀')와 비교해, 윗부분의 조각 수가 더 적거나
+    # 높이가 0.6배보다 낮으면 중성이 잘려 나간 것으로 보고 버린다(ㅠ·ㅜ 다리가 받침에 붙은 글자 등).
+    for cp in list(parts):
+        l, v, t = dec(cp)
+        ref = drawn.get(enc(l, v, 0))
+        if ref is None:
+            continue
+        top = parts[cp][0]
+        tb, rb = union_b([x[1] for x in top]), union_b([x[1] for x in ref])
+        if len(top) < len(ref) or (tb[3] - tb[1]) < 0.6 * (rb[3] - rb[1]):
+            del parts[cp]
     # 윗부분(초성+중성)의 보통 크기: 모음 모양 갈래별
     top_h = defaultdict(list)
     for cp, (top, bot) in parts.items():

@@ -3,6 +3,11 @@
   Information Service). Font designed by Design210.
   Dotted tracing version (c) 2026 Kim Kyungmin.
 
+특수교육 점선판서체 (Special Ed Jeomseon Panseo)
+  Based on Hakgyoansim Ocarina, Copyright (c) 2025 KERIS (Korea Education and Research
+  Information Service).
+  Dotted tracing version (c) 2026 Kim Kyungmin.
+
 특수교육 점선바른체 (Special Ed Jeomseon Bareun)
   Based on NanumBarunPen, Copyright (c) 2010, NAVER Corporation (https://www.navercorp.com/)
   with Reserved Font Name Nanum, Naver Nanum, NanumGothic, Naver NanumGothic, NanumMyeongjo,

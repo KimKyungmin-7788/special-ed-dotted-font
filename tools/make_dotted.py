@@ -315,6 +315,8 @@ def build(src, dst, gids_dots, opts):
     if opts.color:
         add_color(font, gids_dots, opts.color)
 
+    if opts.fstype is not None:  # 문서 포함(임베딩) 허용 범위
+        font["OS/2"].fsType = opts.fstype
     if opts.unify_metrics:
         unify_metrics(font, opts)
     set_names(font, opts)
@@ -404,6 +406,7 @@ def main():
     ap.add_argument("--family-ko", default="특수교육 점선체")
     ap.add_argument("--version", default="1.000")
     ap.add_argument("--copyright", default="Dotted tracing derivative, 2026.", help="name ID 0 저작권 문구")
+    ap.add_argument("--fstype", type=int, default=None, help="OS/2 fsType(임베딩 허용). 예: 8=편집 가능 임베딩")
     ap.add_argument("--designer-ko", default="김경민", help="name ID 9 개발자 이름(한국어)")
     ap.add_argument("--designer-en", default="Kim Kyungmin", help="name ID 9 개발자 이름(영어)")
     ap.add_argument("--license-url", default="", help="name ID 14 라이선스 주소")

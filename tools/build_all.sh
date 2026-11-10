@@ -1,17 +1,19 @@
 #!/usr/bin/env bash
-# 특수교육 점선체 2종을 만든다.  결과: build/*.ttf, build/web/
+# 특수교육 점선체 3종을 만든다.  결과: build/*.ttf, build/web/
 #   점선필기체 ← 학교안심 꼬꼬마 R (+ 없는 글자 조립)
+#   점선판서체 ← 학교안심 오카리나 R (+ 없는 글자 조립)
 #   점선바른체 ← 나눔바른펜 R
 # 한글·숫자를 정사각형 따라쓰기 칸 가운데에 맞춤, 점 28 / 간격 56
 set -euo pipefail
 cd "$(dirname "$0")/.."
 VER=${VER:-1.000}
-# 일부만 만들려면: ONLY="bareun" ./tools/build_all.sh
-ONLY=${ONLY:-"pilgi bareun"}
+# 일부만 만들려면: ONLY="panseo bareun" ./tools/build_all.sh
+ONLY=${ONLY:-"pilgi panseo bareun"}
 want() { [[ " $ONLY " == *" $1 "* ]]; }
 mkdir -p build
 
 CR_PILGI="Based on Hakgyoansim Kkokkoma (Copyright (c) KERIS; design by Design210). Dotted tracing version (c) 2026 Kim Kyungmin."
+CR_PANSEO="Based on Hakgyoansim Ocarina (Copyright (c) 2025 KERIS). Dotted tracing version (c) 2026 Kim Kyungmin."
 CR_BAREUN="Based on NanumBarunPen (Copyright (c) 2010, NAVER Corporation; design by YoonDesign Inc.). Dotted tracing version (c) 2026 Kim Kyungmin."
 LIC_OFL="This Font Software is licensed under the SIL Open Font License, Version 1.1."
 
@@ -26,6 +28,12 @@ if want pilgi; then
   python3 tools/compose_hangul.py 원본/HakgyoansimKkokkomaR.ttf build/src_pilgi.ttf --report build/compose_report.txt
   dotted build/src_pilgi.ttf build/SpecialEdJeomseonPilgi.ttf "특수교육 점선필기체" "Special Ed Jeomseon Pilgi" "$CR_PILGI" \
     --loop-expand 0.9
+fi
+# 판서체: 획이 굵어(약 90) 잔가지 90·꺾임 70. ㅇ 보정은 쓰지 않는다.
+if want panseo; then
+  python3 tools/compose_hangul.py 원본/HakgyoansimOcarinaR.ttf build/src_panseo.ttf --report build/compose_report_panseo.txt
+  dotted build/src_panseo.ttf build/SpecialEdJeomseonPanseo.ttf "특수교육 점선판서체" "Special Ed Jeomseon Panseo" "$CR_PANSEO" \
+    --prune 90 --corner-reach 70 --fstype 8
 fi
 # 바른체: 획 굵기(약 60)에 맞춰 잔가지 70·꺾임 55
 if want bareun; then
@@ -42,7 +50,7 @@ ls -l build/SpecialEdJeomseon*.ttf build/web
 # 배포 폴더(dist/)에 복사: 설치용 TTF는 한글 파일 이름, 웹폰트는 영어 파일 이름
 if [ "${DIST:-0}" = 1 ]; then
   mkdir -p dist/web
-  for k in "Pilgi 필기체" "Bareun 바른체"; do
+  for k in "Pilgi 필기체" "Panseo 판서체" "Bareun 바른체"; do
     set -- $k
     [ -f "build/SpecialEdJeomseon$1.ttf" ] && cp "build/SpecialEdJeomseon$1.ttf" "dist/특수교육 점선$2.ttf"
   done
